@@ -1,0 +1,8 @@
+{
+  "label": "Advanced",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+      "description": "This section provides advanced information about how the various proof objects consumed by the IBC Bridge contract interface are constructed and verified. This information will be more useful to e.g. the developers of proof object providers, and can be safely skipped by developers and users that will be getting proof objects from available services and ready-made libraries and tools."
+  }
+}
