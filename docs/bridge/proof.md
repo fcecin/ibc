@@ -18,9 +18,9 @@ Blockchain applications that need to obtain proof objects to provide to the brid
 
 Currently, applications have the following alternatives to generate or obtain proof objects:
 
-* Consult their specific Antelope blockchain documentation and support channels for available services/APIs that provide IBC proof objects ready for consumption by applications, such as (but not limited to) an open, running instance of the _proof server_ (presented in the next subsection);
+* Consult their specific Antelope blockchain documentation and support channels for available services/APIs that provide IBC proof objects ready for consumption by applications, such as (but not limited to) an open, running instance of the [proof server](proofserver);
 
-* Directly deploy and use the _proof server_ that is provided as part of the Antelope IBC suite (presented in the next subsection);
+* Directly deploy and use the [proof server](proofserver) that is provided as part of the Antelope IBC suite;
 
 * Develop their own libraries or services, using the proof data structure documentation and Antelope IBC contract and samples source code repositories as the reference, as well as the Antelope IBC developer support groups and the support groups of specific Antelope blockchains.
 

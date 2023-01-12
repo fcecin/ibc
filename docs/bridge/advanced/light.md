@@ -6,20 +6,16 @@ sidebar_position: 2
 
 This section explains the ```lightproof``` object.
 
-**WIP/FIXME BELOW**
+The block light proof structure contains:
 
-Block Light Proof :
+* ```chain_id```: identifies the chain this proof originates from,
+* ```header```: a block header,
+* ```root```: the merkle root at the block's height,
+* ```bmproofpath```: the merkle branches connecting the block ID with the last proven merkle root held by the contract.
 
-	The block light proof structure contains :
+Example of a light proof object:
 
-the chain_id, serving to identify the chain this proof originates from
-a block header
-the merkle root at the block height
-the merkle branches connecting the block ID with the last proven merkle root held by the contract (bmproofpath)
-
-
-block Light Proof example :
-
+```
 {
       "chain_id": "73e4385a2708e6d7048834fbc1079f2fabb17b3c125b146af438971e90716c4d",
       "header": {
@@ -62,5 +58,5 @@ block Light Proof example :
         "32320e40f0ac29475fede29002678a667f39664ff0891c406d64b4c7573dbd20"
       ]
     }
-
+```
 

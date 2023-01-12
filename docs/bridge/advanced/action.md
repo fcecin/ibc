@@ -6,19 +6,16 @@ sidebar_position: 3
 
 This section explains the ```actionproof``` object.
 
-**WIP/FIXME BELOW**
+The action proof is composed of
 
-Action proof :
+* ```action```: an action invocation,
+* ```receipt```: the matching action receipt,
+* ```amproofpath```: the merkle branches connecting the action receipt digest with the action_mroot field of the header,
+* ```returnvalue```: an optional return value, if the ```ACTION_RETURN_VALUE``` feature has been enabled on the blockchain.
 
-	The action proof is composed of :
+Example of an action proof object:
 
-an action
-the matching action receipt
-the merkle branches connecting the action receipt digest with the action_mroot field of the header (amproofpath) 
-an optional return value, if the ACTION_RETURN_VALUE feature has been enabled on the network
-
-action proof example :
-
+```
 {
       "receipt": {
         "abi_sequence": "1",
@@ -50,6 +47,6 @@ action proof example :
         "6d032916f48f33ca6df571a5316c96affefd8410e34d2855358cb3c9b52080e2"
       ],
       "returnvalue": ""
-    }
-
+}
+```
 

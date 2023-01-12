@@ -6,26 +6,28 @@ sidebar_position: 1
 
 This section explains the ```heavyproof``` object.
 
-**WIP/FIXME BELOW**
+## ```heavyproof```
 
-The ```heavyproof``` structure proves the finality of a block on a foreign blockchain, and it contains four named top-level elements in the JSON object:
+The ```heavyproof``` structure proves the finality of a block on a foreign blockchain, and it will contain four named top-level elements in its JSON object representation:
 
-* ```chain_id```, which identify the chain this proof originates from.
-* ```blocktoprove```, which is the block to be proven final.
-* ```hashes```, which is an array of all hashes contained in the incremental merkle tree and merkle branches of the proof. 
+* ```chain_id```: identifies the chain this proof originates from (string object with an Antelope chain ID value in hexadecimal).
+* ```blocktoprove```: object with the block that is being proven to be final.
+* ```bftproof```: array of objects that comprise the proof (that the block is finalized).
+* ```hashes```: an array of all hashes contained in the incremental merkle tree and merkle branches of the proof. 
 
-## blocktoprove:
-”, which contains :
-the block header
-the block producer signature(s)
-the previous block merkle root
-the incremental merkle tree structure at the previous block height
+## ```blocktoprove```
 
-block_to_prove example : 
+This object contains:
 
+* The block header,
+* The block producer signature(s),
+* The previous block merkle root, and
+* The incremental merkle tree structure at the previous block height.
 
+Example of a ```blocktoprove``` object:
 
-      {
+```
+{
         "block": {
           "header": {
             "timestamp": "2022-08-30T17:57:49.500",
@@ -63,17 +65,19 @@ block_to_prove example :
           14
         ],
         "node_count": 32347214
-      }
+}
+```
 
+## ```bftproof```
 
-## BFT proof
+This object contains the BFT proofs (Byzantine fault-tolerance proofs), that is, the proof that the ```blocktoprove``` is final according to the BFT consensus mechanism of the blockchain.
 
-the “BFT proofs” (byzantine fault tolerance proofs), an array of structures composed of the following : 
-a block header
-the block producer signature(s)
-the previous merkle root (previous_bmroot)
-a list of merkle branches (bmproofpath)
+The object is an array of objects. Each object is composed of the following: 
 
+* ```header```: a block header,
+* ```producer_signatures```: the block producer signature(s),
+* ```previous_bmroot```: the previous merkle root,
+* ```bmproofpath```: a list of merkle branches.
 	
 Under the current consensus model, a two-thirds supermajority of producers from the current scheduled set confirm each block twice. The first confirmation stage proposes a last irreversible block (LIB). The second stage confirms the proposed LIB as final. At this point, the block becomes irreversible.
 
@@ -83,14 +87,10 @@ As an example, consider the standard Antelope configuration of 21 block producer
 
 Since the block_to_prove counts for one in the first round, 14 BFT proofs must be added to seal the first round. Similarly, since the last BFT proof  of the first round counts as the first one for the second round, 14 additional BFT proofs must be added to the array, for a total of 28 BFT proofs.
 
-	
+Example of a BFT proof component object:
 
-
-BFT proof example :
-
-
-
-      {
+```
+{
           "header": {
             "timestamp": "2022-08-30T17:57:54.000",
             "producer": "eosnationftw",
@@ -133,22 +133,19 @@ BFT proof example :
             35,
             36
           ]
-      }
+}
+```
 
+## ```hashes```
 
+It is an array of all hashes contained in the incremental merkle tree (see ```active_nodes``` in ```blocktoprove```) and merkle branches of the proof (see ```bmproofpath``` in ```bftproof```). 
 
+Since many of these hashes are repeated throughout the proof, they are mapped using ```uint16_t``` indices instead, achieving a lossless compression ratio of between 20% and 80%, depending on the block height.
 
-## Hashes
+Example of a ```hashes``` array (abridged; these will usually be much longer):
 
-An array of all hashes contained in the incremental merkle tree (see active_nodes above) and merkle branches of the proof (see bmproofpath above). 
-
-Since many of these hashes are repeated throughout the proof, we map them using uint16_t indices instead, achieving a lossless compression ratio of between 20% and 80% depending on the block height.
-
-hashes array example :
-
-
-
-      [
+```
+[
         "f71f3caee388324520ecc34f3e1cc43068127aa1e2c7339db518094e69152490",
         "9c1b482433c921268cc0d35aa44cafa5727eece14b12ee419139e0e6c8c539c8",
         "f81e478eb2e76a7250689b0176d2e6099f20641a793c81278fdf2f9811ac32e6",
@@ -163,10 +160,6 @@ hashes array example :
         "b259b8a5e302122fde20aed648f896ead3ee8cdaa397f7408b494ad5cda30263",
         "90ae8df1f23ab2c80276e7e1c30a32be45913f4c02a8ce3663745d16d12e7507",
         "b2320e40f0ac29475fede29002678a667f39664ff0891c406d64b4c7573dbd20",
-        "9db19461c8416b3ad6c0352c09cc3a43d7c04ef6724f201c9268aa59d2e5f0f8",
-        [...]
-      ]
-
-
-
-
+        "9db19461c8416b3ad6c0352c09cc3a43d7c04ef6724f201c9268aa59d2e5f0f8"
+]
+```
