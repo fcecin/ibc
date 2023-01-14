@@ -5,6 +5,8 @@ sidebar_position: 1
 
 # Introduction
 
+> **_NOTE:_** This is a **pre-release** of the documentation. Please send your feedback to the [Antelope IBC support channel](https://t.me/antelopeIBC).
+
 This is Antelope's Inter-Blockchain Communication (IBC) smart contracts infrastructure documentation.
 
 The goal of this documentation is to explain:
