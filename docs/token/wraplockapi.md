@@ -6,34 +6,32 @@ sidebar_position: 3
 
 This section discusses the Wraplock API.
 
-**FIXME/WIP**
+The `wraplock` contract exposes the following entry points that are callable by users:
 
-The Wraplock contract exposes the following user APIs:
+* `transfer` notification: transferring native tokens to the `wraplock` contract will lock them and trigger an inline `wraplock::emitxfer` action which records the token transfer in the action parameters. A proof of execution of a `wraplock::emitxfer` action with specific parameters on the source chain, provided to the `wraptoken` contract on the destination chain, allows the `wraptoken` endpoint to issue a quantity of wrapped tokens, to the beneficiary named in the (now proven) `wraplock::emitxfer` action invocation, that is equivalent to the quantity of tokens locked by this token-locking transfer; it also allows the `wraptoken` contract on the destination chain to decide to cancel the token transfer from the source chain (see the [Wraptoken API](/token/wraptokenapi.md) in the next section).
 
-* deposit (via transfer notification): locks the received native tokens in the contract and triggers an inline emitxfer action.
+* `withdrawa`: attempts to verify a provided block proof using the heavy proof scheme and an action proof of a `wraptoken::emitxfer` action from the paired chain that proves that some wrapped tokens on the paired chain have been retired. On verification success, transfers native tokens from this `wraplock` contract to the beneficiary account, in this chain, that is named in the parameters to the `wraptoken::emitxfer` action.
 
-* withdrawa: accepts a block proof (using the heavy scheme) and an action proof of an emitxfer action from the paired chain, saves this to RAM and calls checkproofb on the bridge contract for verification. On success, transfers native tokens from the contract to the beneficiary named in the emitxfer action.
+* `withdrawb`: same as `withdrawa`, but verifies a block proof using the light proof scheme.
 
-* withdrawb: accepts a block proof (using the light scheme) and an action proof of an emitxfer action from the paired chain, saves this to RAM and calls checkproofc on the bridge contract for verification. On success, transfers native tokens from the contract to the beneficiary named in the emitxfer action.
+* `cancela`: attempts to verify a provided block proof using the heavy scheme and an action proof of a `wraptoken::emitxfer` action from the paired chain that proves that some wrapped tokens on the paired chain have been retired. On verification success, triggers an inline `emitxfer` action to reissue and return the wrapped tokens to the account on the paired chain that was trying to send the wrapped tokens back to the source chain (where this `wraplock` endpoint resides).
 
-* cancela: accepts a block proof (using the heavy scheme) and an action proof of an emitxfer action from the paired chain, saves this to RAM and calls checkproofb on the bridge contract for verification. On success, triggers an inline emitxfer action to return the tokens.
+* cancelb: same as `cancela`, but verifies a block proof using the light proof scheme.
 
-* cancelb: accepts a block proof (using the light scheme) and an action proof of an emitxfer action from the paired chain, saves this to RAM and calls checkproofc on the bridge contract for verification. On success, triggers an inline emitxfer action to return the tokens.
+In essence, the `transfer` notification on the `wraplock` contract produces an inline action that records the information needed to issue and transfer the equivalent wrapped tokens over at the destination chain, using the block and action proving methods of the IBC Bridge. The `memo` field of the `eosio.token` transfer into the `wraplock` contract specifies the name of the account, on the destination chain, that is the beneficiary, that is, the account that is going to receive the equivalent amount of wrapped tokens. 
 
-**FIXME/TODO short discussion on how to use these**
+On the other hand, the `withdrawa`, `withdrawb`, `cancela` and `cancelb` actions work on the opposite direction: they act upon a proof of a `wraptoken::emitxfer` inline action being triggered on the _destination_ chain (see the [Wraptoken API](/token/wraptokenapi.md) in the next section). Possessing a proof that some account on the destination chain has retired (destroyed) some wrapped tokens allows the `wraplock` contract to release the equivalent amount of locked native tokens to some beneficiary (that is named in the `wraptoken::emitxfer` action invocation's parameters) using the `withdraw` actions, or cancel that transfer of wrapped tokens back into native tokens, using the `cancel` actions.
 
-These are inline actions that are triggered by other actions:
+These are internal inline actions that are triggered by user action:
 
-* emitxfer: an inline action, triggered when native tokens are locked in the contract or a cross-chain transfer to this chain is cancelled. Specifies the token, quantity and beneficiary, and forms part of the proof. Requires contract authority.
-
-**FIXME/TODO short discussion about it here, its relation to the Bridge**
+* `emitxfer`: As mentioned above, this is an internal inline action that is triggered when native tokens are locked in this contract (as a side-effect of a `transfer` of tokens to it) or a cross-chain transfer to this chain is cancelled (via the `cancela` or `cancelb` actions listed above). Specifies the token, quantity and beneficiary, and forms part of the proof.
 
 Admin APIs:
 
-* init: initializes a new pairing between two chains and specifies the bridge contract which handles proof verification. Requires contract authority.
+* `init`: initializes the token bridge, between this chain and another specific chain.
 
-* addcontract: adds support for a native token contract and its corresponding wraptoken contract. Requires contract authority.
+* `addcontract`: adds support for a native token contract and its corresponding `wraptoken` contract on the paired chain.
 
-* delcontract: removes support for a native token contract. Requires contract authority.
+* `delcontract`: removes support for a native token contract.
 
-**FIXME/TODO short deployment/admin procedure discussion**
+For more information, refer to the [Wraplock reference documentation](/contracts/wraplock.md).
