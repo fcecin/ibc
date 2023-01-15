@@ -137,7 +137,7 @@ Allows `prover` account to redeem native tokens and send them to the beneficiary
 
 **Authority**
 
-- `prover`   `
+- None.
 
 **Parameters**
 

@@ -16,12 +16,6 @@ This contract provides user and administration interfaces for the Antelope IBC B
 
 ## Structs
 
-### STRUCT `schedulev2`
-### STRUCT `sblockheader`
-### STRUCT `blockheader`
-### STRUCT `actreceipt`
-### STRUCT `anchorblock`
-
 ### STRUCT `actionproof`
 
 Action invocation proof.
@@ -32,6 +26,47 @@ Action invocation proof.
 - `{bridge::actreceipt} receipt` - the receipt of the action invocation
 - `{std::vector<char>} returnvalue` - the value returned by the acton
 - `{std::vector<checksum256> amproofpath` - the main action proof object
+
+### STRUCT `actreceipt`
+
+**Fields**
+
+- `{name} receiver`
+- `{checksum256} act_digest`
+- `{uint64_t} global_sequence`
+- `{uint64_t} recv_sequence`
+- `{std::vector<bridge::authseq>} auth_sequence`
+- `{unsigned_int} code_sequence`
+- `{unsigned_int} abi_sequence`
+
+### STRUCT `anchorblock`
+
+**Fields**
+
+- `{bridge::sblockheader} block`
+- `{std::vector<uint16_t>} active_nodes`
+- `{uint64_t} node_count`
+
+### STRUCT `authseq`
+
+**Fields**
+
+- `{name} account`
+- `{uint64_t} sequence`
+
+### STRUCT `blockheader`
+
+**Fields**
+
+- `{block_timestamp} timestamp`
+- `{name} producer`
+- `{uint16_t} confirmed`
+- `{checksum256} previous`
+- `{checksum256} transaction_mroot`
+- `{checksum256} action_mroot`
+- `{uint32_t} schedule_version`
+- `{std::optional<producer_schedule>} new_producers`
+- `{std::vector<std::pair<uint16_t,std::vector<char>>>} header_extensions`
 
 ### STRUCT `heavyproof`
 
@@ -54,6 +89,22 @@ Light block proof.
 - `{bridge::blockheader} header` - header of the block being proven
 - `{checksum256} - root` - merkle root
 - `{std::vector<checksum256> bmproofpath` - the main light block proof object
+
+### STRUCT `sblockheader`
+
+**Fields**
+
+- `{bridge::blockheader} header`
+- `{std::vector<signature>} producer_signatures`
+- `{checksum256} previous_bmroot`
+- `{std::vector<uint16_t>} bmproofpath`
+
+### STRUCT `schedulev2`
+
+- `{uint32_t} version`
+- `{std::vector<producer_authority>} producers`
+
+**Fields**
 
 ## Tables
 

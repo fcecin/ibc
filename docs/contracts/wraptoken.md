@@ -204,7 +204,7 @@ The standard `eosio.token` action to open a balance of wrapped tokens for an acc
 
 **Authority**
 
-* `owner`
+* `ram_payer`
 
 **Parameters**
 
