@@ -4,9 +4,9 @@ sidebar_position: 3
 
 # Wraplock API
 
-This section discusses the Wraplock API.
+This section discusses the main Wraplock APIs.
 
-The `wraplock` contract exposes the following entry points that are callable by users:
+The `wraplock` contract exposes the following public actions:
 
 * `transfer` notification: transferring native tokens to the `wraplock` contract will lock them and trigger an inline `wraplock::emitxfer` action which records the token transfer in the action parameters. A proof of execution of a `wraplock::emitxfer` action with specific parameters on the source chain, provided to the `wraptoken` contract on the destination chain, allows the `wraptoken` endpoint to issue a quantity of wrapped tokens, to the beneficiary named in the (now proven) `wraplock::emitxfer` action invocation, that is equivalent to the quantity of tokens locked by this token-locking transfer; it also allows the `wraptoken` contract on the destination chain to decide to cancel the token transfer from the source chain (see the [Wraptoken API](/token/wraptokenapi.md) in the next section).
 
@@ -14,7 +14,7 @@ The `wraplock` contract exposes the following entry points that are callable by 
 
 * `withdrawb`: same as `withdrawa`, but verifies a block proof using the light proof scheme.
 
-* `cancela`: attempts to verify a provided block proof using the heavy scheme and an action proof of a `wraptoken::emitxfer` action from the paired chain that proves that some wrapped tokens on the paired chain have been retired. On verification success, triggers an inline `emitxfer` action to reissue and return the wrapped tokens to the account on the paired chain that was trying to send the wrapped tokens back to the source chain (where this `wraplock` endpoint resides).
+* `cancela`: attempts to verify a provided block proof using the heavy scheme and an action proof of a `wraptoken::emitxfer` action from the paired chain that proves that some wrapped tokens on the paired chain have been retired. On verification success, triggers an inline `emitxfer` action to reissue and return the wrapped tokens to a beneficiary account on the paired chain.
 
 * cancelb: same as `cancela`, but verifies a block proof using the light proof scheme.
 

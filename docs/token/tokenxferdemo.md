@@ -6,14 +6,8 @@ sidebar_position: 5
 
 This section presents the IBC Token demo app.
 
-**FIXME/WIP**
+The IBC Token transfer demo app is a web front-end that uses javascript and that connects to running [proof servers](/bridge/proofserver.md) and blockchain API nodes on two blockchains and uses the IBC Token contracts to transfer a native token to a destination blockchain, which becomes a wrapped token, and then back.
 
-The IBC Token transfer demo app is a web interface that uses javascript that connects to running Proof Servers (link to the Proof Server page) and blockchain API nodes on two blockchains and uses the IBC Token contracts to transfer a native token to a destination blockchain, which becomes a wrapped token, and then back.
+The running demo can be accessed here: **FIXME**
 
-Here's instructions on how you can run the demo yourself: ...
-
-OR
-
-Here's the URL of the running demo.
-
-Also, here's all the code:
+The source code for the demo can be downloaded from its [source repository on Github](https://github.com/CryptoMechanics/ibc-reference-ui-html). 

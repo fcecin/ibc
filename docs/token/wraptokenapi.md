@@ -4,32 +4,30 @@ sidebar_position: 4
 
 # Wraptoken API
 
-This section discusses the Wraptoken API.
+This section discusses the main Wraptoken APIs.
 
-**FIXME/WIP**
+The `wraptoken` contract exposes the following public actions:
 
-The Wraptoken contract exposes the following user APIs:
+* `retire`: this action allows an account holding some quantity of wrapped tokens to remove these from the wrapped token supply (i.e. burn, destroy them), while specifying a beneficiary account on the paired source chain that will be able to withdraw an equivalent amount of locked native tokens. This action triggers inline `wraptoken::emitxfer` action, which will contain the parameters of the token transfer back into the paired chain.
 
-* issuea: accepts a block proof (using the heavy scheme) and an action proof of an emitxfer action from the paired chain, saves this to RAM and calls checkproofb on the bridge contract for verification. On success, issues and transfers wrapped tokens from the contract to the beneficiary named in the emitxfer action.
+* `issuea`: attempts to verify a provided block proof using the heavy proof scheme and an action proof of a `wraplock::emitxfer` action from the paired chain that proves that an amount of native tokens has been locked on the paired source chain. On success, On success, issues and transfers wrapped tokens from this contract to the beneficiary account, in this chain, that is named in the parameters to the `wraplock::emitxfer` action.
 
-* issueb: accepts a block proof (using the light scheme) and an action proof of an emitxfer action from the paired chain, saves this to RAM and calls checkproofc on the bridge contract for verification. On success, issues and transfers wrapped tokens from the contract to the beneficiary named in the emitxfer action.
+* `issueb`: same as `issuea`, but verifies a block proof using the light proof scheme.
 
-* cancela: accepts a block proof (using the heavy scheme) and an action proof of an emitxfer action from the paired chain, saves this to RAM and calls checkproofb on the bridge contract for verification. On success, triggers an inline emitxfer action to return the tokens.
+* `cancela`: attempts to verify a provided block proof using the heavy proof scheme and an action proof of a `wraplock::emitxfer` action from the paired chain that proves that an amount of native tokens has been locked on the paired source chain. On verification success, triggers an inline `emitxfer` action to unlock and return the native tokens to a beneficiary account on the paired chain.
 
-* cancelb: accepts a block proof (using the light scheme) and an action proof of an emitxfer action from the paired chain, saves this to RAM and calls checkproofc on the bridge contract for verification. On success, triggers an inline emitxfer action to return the tokens.
+* `cancelb`: same as `cancela`, but verifies a block proof using the light proof scheme.
 
-* retire: removes the wrapped tokens from supply and triggers an inline emitxfer action
+The `wraptoken` contract is essentially an `eosio.token` contract for the wrapped version of native tokens that reside on another chain. Wrapped tokens are first created at the destination chain (the chain where this `wraptoken` contract is deployed) through calling one of the `issue` actions. These actions take as a parameter a proof that an equivalent amount of native tokens in the paired source chain have been locked. The `cancel` actions, instead of minting wrapped tokens, will cancel the transfer and cause the locked tokens to be returned in the paired chain to a beneficiary account.
 
-**FIXME/TODO discussion**
+Finally, the `retire` action takes wrapped tokens and retires (burns, destroys) them, which allows for the sending of a corresponding amount of native tokens in the paired chain. In a sense, `retire` is similar to `cancel` in that it allows native tokens to be unlocked and transferred in the paired chain, but `cancel` takes a proof of a remote native token transfer (which is being reverted), while `retire` just takes a quantity of the wrapped tokens.
 
-Inline actions:
+These are internal inline actions that are triggered by user action:
 
-* emitxfer: an inline action generated when wrapped tokens are retired or a cross-chain transfer to this chain is cancelled. Specifies the token, quantity and beneficiary, and forms part of the proof. Requires contract authority.
-
-**FIXME/TODO discussion**
+* `emitxfer`: As mentioned above, this is an internal inline action that is triggered when wrapped tokens are retired (via the `retire` action) or a cross-chain transfer to this chain is cancelled (via the `cancela` or `cancelb` actions listed above). Specifies the token, quantity and beneficiary, and forms part of the proof.
 
 Admin APIs:
 
-* init: initializes a new pairing between two chains, specifies the bridge contract which handles proof verification and specifies the native token contract on the source chain. Requires contract authority.
+* `init`: initializes the token bridge, between this chain and another specific chain.
 
-**FIXME/TODO discussion**
+For more information, refer to the [Wraptoken reference documentation](/contracts/wraptoken.md).
