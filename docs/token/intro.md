@@ -4,13 +4,15 @@ sidebar_position: 1
 
 # Introduction
 
-This section provides a summary of the IBC Token solution.
+This section introduces the IBC Token solution.
 
-**FIXME/WIP**
+Antelope IBC Token is a complete inter-chain asset transfer solution that is built on top of the Antelope IBC Brige. It allows for any `eosio.token`-compatible asset to be securely transferred between two Antelope blockchains.
 
-IBC Token is implemented as a pair of smart contracts:
+This chapter is organized as follows:
 
-* Wraplock: enables a user to lock native tokens on chain A
-* Wraptoken: allows locked tokens on chain A to be issued as wrapped tokens on chain B.
+* **Overview** provides a general explanation of how to deploy and use the IBC Token solution.
+* **Wraplock API** explains how to use the `wraplock` contract.
+* **Wraplock API** explains how to use the `wraptoken` contract.
+* **IBC Token demo** presents the demo web application that allows transfers of tokens between Antelope testnets using a mesh of deployed IBC Token bridges between them.
+* **Advanced** contains a few notes on how IBC Token uses the IBC Bridge to work.
 
-The wraplock and wraptoken contracts work together to facilitate interchain token transfers (also called wrapping and unwrapping). They require and utilise an IBC Bridge contract deployed on the blockchains at both ends of the tokens to be transferred. The bridge handles all the cryptographic proof verification that ensure native tokens are locked before wrapped tokens are minted, and that wrapped tokens are retired before native tokens are released.
